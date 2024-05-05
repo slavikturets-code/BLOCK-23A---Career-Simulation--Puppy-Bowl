@@ -8,12 +8,47 @@
     <title>PuppyBowl</title>
   </head>
   <body>
-    <form id="new-player-form"></form>
-    <main>
-      <div>
-           
-      </div>
+    <form id="new-player-form">
+      <h3>Puppy Bowl New Player Form</h3>
+      <br>
+      <label>
+        Player Name
+        <input id = "inputPlayerName" type="text" required/>
+      </label>
 
+      <label>
+        Breed
+        <input id = "inputBreed" type="text" required/>
+      </label>
+      
+      <label for="breed-select">Status
+       <select name="dogs" id="inputStatus" required>
+        <option value="bench">Bench</option>
+        <option value="Field">Field</option>
+       </select>
+      </label>
+      <br>
+      <br>
+      <label>
+        Image URL
+        <input id = "inputImageUrl" type="url" name="url" placeholder="https://example.com" required/>
+      </label>
+      <button name="submit" type="submit" id="submit" value="submit">Submit</button>
+    </form>
+    <main>
+      <div id = "cardStorage"></div>
+      <div class="popup">
+        <div class="popup-content">
+            <h2>Player Detailed Profile</h2>
+            <p id="playerName" class="player-details"></p>
+            <p id="playerId" class="player-details"></p>
+            <p id="breed" class="player-details"></p>
+            <p id="status" class="player-details"></p>
+            <p id="createdAt" class="player-details"></p>
+            <img id="detailedImage" src="" alt="">
+        </div>
+        <span id="close-popup">X</span>
+      </div>
     </main>
     <script src="./script.js"></script>
   </body>

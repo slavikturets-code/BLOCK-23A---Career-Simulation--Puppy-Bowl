@@ -3,6 +3,14 @@
 const cohortName = "2402-ftb-mt-web-pt";
 const API_URL = `https://fsa-puppy-bowl.herokuapp.com/api/${cohortName}`;
 
+//const main = document.querySelector("main");
+const playerForm = document.getElementById("new-player-form");
+const submitBtn = document.getElementById("submit");
+const cardStorage = document.getElementById("cardStorage");
+const popupContainer = document.querySelector(".popup");
+const popupContent = document.querySelector(".popup-content");
+const closePopupBtn = document.getElementById("close-popup");
+
 class Player{
   constructor(name, breed, status, imageUrl, teamId){ 
   this.name =  name;
@@ -11,6 +19,96 @@ class Player{
   this.imageUrl = imageUrl;
   this.teamId = teamId;
  };
+}
+
+function createSeeDetailsButton(player) {
+  const detailsBtn = document.createElement("button");
+  detailsBtn.innerText = "See details";
+  detailsBtn.classList.add("player-btn");
+  detailsBtn.addEventListener("click", async () => {
+    try {
+      renderSinglePlayer(player);
+      //console.log(player);
+    } catch (err) {
+      console.log(err);
+    }
+  });
+  return detailsBtn;
+}
+
+function createRemoveFromRosterButton(player) {
+  const removeBtn = document.createElement("button");
+  removeBtn.innerText = "Remove player";
+  removeBtn.classList.add("player-btn");
+  removeBtn.classList.add("remove-player-btn");
+  let cardStorage = document.getElementById("cardStorage")
+  removeBtn.addEventListener("click", async () => {
+    
+  try {
+       await removePlayer(player.id);
+       while (cardStorage.hasChildNodes())
+         cardStorage.firstChild.remove()
+       console.log("cardStorage:",cardStorage) ;
+       await renderAllPlayers(await fetchAllPlayers());
+      //console.log(player);
+    } catch (err) {
+      console.log(err);
+    }
+  });
+  return removeBtn;
+}
+
+function createPopupPlayerDetailsUI(player){
+   
+  const playerName = document.getElementById("playerName");
+  playerName.innerText = `Name: ${player.name}`;
+
+  const playerId = document.getElementById("playerId");
+  playerId.innerText = `ID: ${player.id}`;
+
+  const breed = document.getElementById("breed");
+  breed.innerText = `Breed: ${player.breed}`;
+
+  const status = document.getElementById("status");
+  status.innerText = `Status: ${player.status}`;
+
+  const createdAt = document.getElementById("createdAt");
+  createdAt.innerText = `CreatedAt: ${player.createdAt}`;
+
+  const detailedImage = document.getElementById("detailedImage");
+  detailedImage.src = player.imageUrl;
+  detailedImage.alt = player.name;
+
+  cardStorage.style.visibility = "hidden";
+  playerForm.style.visibility = "hidden";
+
+  popupContainer.classList.add("popup-visible");
+  popupContent.classList.add("popup-content-full-size");
+}
+
+function createPlayerInfo(player){
+
+  //console.log("player:",player);
+  const playerCard = document.createElement("div");
+  playerCard.id = `div${player.id}`;
+  playerCard.classList.add("player-card");
+
+  const playerName = document.createElement("p");
+  playerName.innerText = `Name: ${player.name}`;
+
+  const playerId = document.createElement("p");
+  playerId.innerText = `ID: ${player.id}`;
+
+  const playerImage = document.createElement("img");
+  playerImage.src = player.imageUrl;
+  playerImage.alt = player.name;
+
+  playerCard.appendChild(playerName);
+  playerCard.appendChild(playerId);
+  playerCard.appendChild(playerImage);
+  playerCard.appendChild(createSeeDetailsButton(player));
+  playerCard.appendChild(createRemoveFromRosterButton(player));
+  return playerCard;
 }
 
 /**
@@ -116,7 +214,14 @@ const removePlayer = async (playerId) => {
  * @param {Object[]} playerList - an array of player objects
  */
 const renderAllPlayers = (playerList) => {
-  // TODO
+
+  //const main = document.querySelector("main");
+  //console.log(Array.isArray(playerList));
+  playerList.forEach((player) => {
+    console.log("pl: ",player);
+    cardStorage.appendChild(createPlayerInfo(player));
+    
+});
 };
 
 /**
@@ -133,7 +238,7 @@ const renderAllPlayers = (playerList) => {
  * @param {Object} player an object representing a single player
  */
 const renderSinglePlayer = (player) => {
-  // TODO
+  createPopupPlayerDetailsUI(player);
 };
 
 /**
@@ -141,9 +246,18 @@ const renderSinglePlayer = (player) => {
  * When the form is submitted, it should call `addNewPlayer`, fetch all players,
  * and then render all players to the DOM.
  */
-const renderNewPlayerForm = () => {
+const renderNewPlayerForm = async () => {
   try {
-    // TODO
+     let playerName = document.getElementById("inputPlayerName");
+     let breed = document.getElementById("inputBreed");
+     let status = document.getElementById("inputStatus");
+     let imageUrl = document.getElementById("inputImageUrl");
+     console.log("name:",playerName);
+     let partyObj = new Player(playerName.value, breed.value, status.value, imageUrl.value, 1);
+     await addNewPlayer(partyObj);
+     while (cardStorage.hasChildNodes())
+      cardStorage.firstChild.remove()     
+     await renderAllPlayers(await fetchAllPlayers());
   } catch (err) {
     console.error("Uh oh, trouble rendering the new player form!", err);
   }
@@ -154,10 +268,17 @@ const renderNewPlayerForm = () => {
  */
 const init = async () => {
   const players = await fetchAllPlayers();
-  renderAllPlayers(players);
+  await renderAllPlayers(players);
 
-  renderNewPlayerForm();
+  //renderNewPlayerForm();
 };
+
+closePopupBtn.addEventListener("click", () => {
+  popupContainer.classList.remove("popup-visible");
+  popupContent.classList.remove("popup-content-full-size");
+  cardStorage.style.visibility = "visible";
+  playerForm.style.visibility = "visible";
+});
 
 // This script will be run using Node when testing, so here we're doing a quick
 // check to see if we're in Node or the browser, and exporting the functions
@@ -176,10 +297,7 @@ if (typeof window === "undefined") {
   init();
 }
 
-//const deletePlayer = removePlayer(5116);
-//const players = fetchAllPlayers(5126);
-//const player = fetchSinglePlayer(5082);
-//const newPlayer = addNewPlayer(new Player("Fanta","Fanta Breed","bench","https://learndotresources.s3.amazonaws.com/workshop/60ad725bbe74cd0004a6cba0/puppybowl-default-dog.png",1));
-/console.log("players:",players);
-//console.log("player:",player);
-//console.log("newPlayer:",newPlayer);
+playerForm.addEventListener("submit",renderNewPlayerForm()); 
+
+
+
