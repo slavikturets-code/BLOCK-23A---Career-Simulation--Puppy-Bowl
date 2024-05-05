@@ -13,25 +13,25 @@
       <br>
       <label>
         Player Name
-        <input id = "inputPlayerName" type="text" required/>
+        <input id = "inputPlayerName" name="name" type="text" required/>
       </label>
 
       <label>
         Breed
-        <input id = "inputBreed" type="text" required/>
+        <input id = "inputBreed" name="breed" type="text" required/>
       </label>
       
       <label for="breed-select">Status
-       <select name="dogs" id="inputStatus" required>
-        <option value="bench">Bench</option>
-        <option value="Field">Field</option>
+       <select name="status" id="inputStatus" required>
+        <option value="bench">bench</option>
+        <option value="field">field</option>
        </select>
       </label>
       <br>
       <br>
       <label>
         Image URL
-        <input id = "inputImageUrl" type="url" name="url" placeholder="https://example.com" required/>
+        <input id = "inputImageUrl" type="url" name="imageUrl" placeholder="https://example.com" required/>
       </label>
       <button name="submit" type="submit" id="submit" value="submit">Submit</button>
     </form>
@@ -47,7 +47,7 @@
             <p id="createdAt" class="player-details"></p>
             <img id="detailedImage" src="" alt="">
         </div>
-        <span id="close-popup">X</span>
+        <span id="close-popup"><button name="submit" type="submit" id="submit">Back to all players</button></span>
       </div>
     </main>
     <script src="./script.js"></script>

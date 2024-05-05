@@ -12,12 +12,11 @@ const popupContent = document.querySelector(".popup-content");
 const closePopupBtn = document.getElementById("close-popup");
 
 class Player{
-  constructor(name, breed, status, imageUrl, teamId){ 
+  constructor(name, breed, status, imageUrl){ 
   this.name =  name;
   this.breed =  breed;
   this.status = status;
   this.imageUrl = imageUrl;
-  this.teamId = teamId;
  };
 }
 
@@ -119,6 +118,7 @@ const fetchAllPlayers = async () => {
   try {
         const response = await fetch(`${API_URL}/players`);
         const dataObj = await response.json();
+        console.log(dataObj);
         return dataObj.data.players;
   } catch (err) {
     console.error("Uh oh, trouble fetching players!", err);
@@ -154,10 +154,10 @@ const fetchSinglePlayer = async (playerId) => {
  */
 const addNewPlayer = async (playerObj) => {
   try {
-      
+    console.log("Inside addNewPlayer");
     const response = await fetch(`${API_URL}/players/`,{
       headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json'
       },
       mode:'cors',
       method: 'POST',
@@ -165,10 +165,10 @@ const addNewPlayer = async (playerObj) => {
          name: playerObj.name,
          breed: playerObj.breed,
          status: playerObj.status,
-         imageUrl: playerObj.imageUrl,
-         teamId: playerObj.teamId  
+         imageUrl: playerObj.imageUrl 
       })
     });
+    console.log("response:",response);
     const playerData = await response.json();
     return playerData;
   } catch (err) {
@@ -217,8 +217,9 @@ const renderAllPlayers = (playerList) => {
 
   //const main = document.querySelector("main");
   //console.log(Array.isArray(playerList));
+
   playerList.forEach((player) => {
-    console.log("pl: ",player);
+    //console.log("player name: ",player);
     cardStorage.appendChild(createPlayerInfo(player));
     
 });
@@ -248,16 +249,23 @@ const renderSinglePlayer = (player) => {
  */
 const renderNewPlayerForm = async () => {
   try {
-     let playerName = document.getElementById("inputPlayerName");
-     let breed = document.getElementById("inputBreed");
-     let status = document.getElementById("inputStatus");
-     let imageUrl = document.getElementById("inputImageUrl");
-     console.log("name:",playerName);
-     let partyObj = new Player(playerName.value, breed.value, status.value, imageUrl.value, 1);
-     await addNewPlayer(partyObj);
-     while (cardStorage.hasChildNodes())
-      cardStorage.firstChild.remove()     
-     await renderAllPlayers(await fetchAllPlayers());
+    //console.log("inside renderNewPlayerForm");
+
+    playerForm.addEventListener("submit",async (e)=>{
+
+      const formElements = playerForm.elements;
+      await addNewPlayer(new Player(formElements["name"].value, formElements["breed"].value, formElements["status"].value, formElements["imageUrl"].value));
+      console.log("name:",formElements["name"].value);
+      console.log("breed:",formElements["breed"].value);
+      console.log("status:",formElements["status"].value);
+      while (cardStorage.hasChildNodes())
+       cardStorage.firstChild.remove()     
+      renderAllPlayers(await fetchAllPlayers());
+
+    });
+    
+     
+      //console.log("Player Name:",player2);
   } catch (err) {
     console.error("Uh oh, trouble rendering the new player form!", err);
   }
@@ -270,7 +278,7 @@ const init = async () => {
   const players = await fetchAllPlayers();
   await renderAllPlayers(players);
 
-  //renderNewPlayerForm();
+  renderNewPlayerForm();
 };
 
 closePopupBtn.addEventListener("click", () => {
@@ -297,7 +305,6 @@ if (typeof window === "undefined") {
   init();
 }
 
-playerForm.addEventListener("submit",renderNewPlayerForm()); 
 
 
 
