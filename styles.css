@@ -3,3 +3,154 @@
   margin: 0;
   box-sizing: border-box;
 }
+
+#cardStorage {
+  width: 80%;
+  margin: 0 auto;
+  margin-top:10px ;
+  display: grid;
+  grid-template-columns: repeat(4, 23.5%);
+  gap: 30px;
+}
+
+.player-card {
+  position: relative;
+  height: 400px;
+  background-color: #43ec00ed;
+  perspective: 1500px;
+  border-radius: 20px;
+  border: 1px solid #0074eced;
+}
+
+img{
+  position: absolute;
+  height: 40%;
+  width: 45%;
+  top:0;
+  left:0;
+  right:0;
+  bottom:0;
+  margin:auto;
+}
+
+p{
+  font-size: 20px;
+  font-weight: bold;
+  color:rgb(101, 44, 175);
+  padding: 7px 5%;
+}
+
+.player-btn{
+  background-color: white;
+  border: 1px solid #ec2300ed;
+  font-size: 20px;
+  /*padding: 7px 5%;*/
+  border-radius: 10px;
+  border-width: 2px;
+  color:blue;
+  position:absolute;
+  bottom:20px;
+  left: 12px;
+}
+
+.popup {
+  height: 100vh;
+  width: 100%;
+  top: 0;
+  left: 0;
+  position: fixed;
+  background-color: rgba(204, 29, 29, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  visibility:hidden;
+  transition: all 0.3s;
+  opacity: 0;
+}
+
+.popup-visible {
+  visibility: visible;
+  opacity: 1;
+}
+
+.popup-content {
+  width: 90%;
+  height: 500px;
+  background-color: white;
+  transform: scale(0.25);
+  opacity: 0;
+  transition: all 0.5s 0.3s;
+  display: grid;
+  grid-template-columns: repeat(1, 23.5%);
+}
+
+.popup-content-full-size {
+  opacity: 1;
+  transform: scale(1);
+}
+
+#close-popup {
+  font-size: 40px;
+  color: white;
+  position: absolute;
+  top: 10px;
+  right: 20px;
+}
+
+h2{
+  color:rgb(101, 44, 175); 
+  position: relative;
+  top:30px;
+  left:150%;
+  text-align: center;
+}
+
+.player-details{
+  color:rgb(7, 97, 55);
+}
+
+#detailedImage{
+  height: 60%;
+  width: 17%;
+}  
+
+.remove-player-btn{
+  position:relative;
+  top:254px;
+  left: 165px;
+}
+
+#new-player-form{
+  background-color: gray;
+  margin-left: 30%;
+  margin-right: 30%;
+  padding: 15px;
+  font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  font-weight: bold;
+  height: 100%;
+  position:relative;
+}
+
+input[type=text],input[type=email],input[type=url],textarea{
+  width: 70%;
+  padding: 10px;
+  border: 1px solid black;
+  box-sizing: border-box;
+  margin-top: 6px;
+  margin-bottom: 16px;
+  resize: vertical;
+  display: block;    
+}
+
+button {
+  background-color: #2e3fd4;
+  color: white;
+  padding: 12px 20px;
+  border: 1px solid black;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover{
+  background-color: #45a049;
+}
